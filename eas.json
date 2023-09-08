@@ -1,0 +1,23 @@
+{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "production": {
+      "env": {
+        "EAS_BUILD_DISABLE_NPM_CACHE": "1",
+        "ANDROID_SDK_ROOT": "/usr/lib/jvm/java-11-openjdk-amd64"
+      }
+    }
+  }
+}
