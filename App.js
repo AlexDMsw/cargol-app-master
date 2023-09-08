@@ -1,10 +1,10 @@
-import 'react-native-gesture-handler';
+
 import NavegationDrawerApp from './src/components/Navegation';
 import Slider from './src/components/Slider';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useFonts } from 'expo-font';
 import { View } from 'react-native';
 import * as Notifications from 'expo-notifications';
@@ -13,6 +13,12 @@ import { useRef } from 'react';
 import Manteniment from './src/components/Mateniment';
 import Main from './src/components/Main';
 import NavegationDrawerSuplemente from './src/components/NavegationSuplemente';
+import { createStackNavigator } from '@react-navigation/stack';
+import DetallNoticia from './src/components/DetallNoticia';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
+
+
 
 export default function App() {
   const notificationListener = useRef();
@@ -20,6 +26,7 @@ export default function App() {
   const [storage, setStorage] = useState(false);
   const [notiTouched, setNotiTouched] = useState(false);
   const [mantenimiento, setMantenimiento] = useState(false);
+
 
 
   useEffect(() => {
@@ -104,11 +111,46 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
-
+  const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <NavegationDrawerSuplemente notiTouched={notiTouched} />
+      <Stack.Navigator initialRouteName="Main">
+        <Stack.Screen name="Portada" component={Main} />
+        <Stack.Screen name="Slider" component={Slider} />
+        <Stack.Screen
+        name="DetallNoticia"
+        component={DetallNoticia}
+        options={({ route }) => ({
+          headerShown: true, title: "", headerStyle: { borderBottomWidth: 0, },
+          headerRight: () => (<TouchableOpacity style={{ marginRight: 20 }}
+            onPress={() => {
+          
+              fetch('https://cargol.outlius.com/noticies/' + route.params.noticia)
+                .then(response => response.json())
+                .then(data => {
+                  //busca el nom de la categoria a partir de data[0].category
+                  let catName = categories.find(category => category.ID == data[0].category)?.nom.toLowerCase();
+
+                 // let catName = categories.find(category => category.ID == route.params.noticia)?.nom.toLowerCase();
+                  catName = catName.replace(/ /g, "-");
+                  
+                  let urlShare = "https://elcargol.com/" + catName + "/" + data[0].id + "-" + data[0].alias;
+
+
+                  Share.share({
+                    message: data[0].titol + "\n" + urlShare
+                  });
+                })
+
+            }} >
+
+            <Ionicons name="share-social-outline" size={22} color="black" />
+          </TouchableOpacity>),
+        })}
+
+
+      />
+      </Stack.Navigator>
     </NavigationContainer>
   )
 
