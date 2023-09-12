@@ -111,46 +111,17 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  const Stack = createStackNavigator();
+  const Drawer = createDrawerNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen name="Portada" component={Main} />
-        <Stack.Screen name="Slider" component={Slider} />
-        <Stack.Screen
-        name="DetallNoticia"
-        component={DetallNoticia}
-        options={({ route }) => ({
-          headerShown: true, title: "", headerStyle: { borderBottomWidth: 0, },
-          headerRight: () => (<TouchableOpacity style={{ marginRight: 20 }}
-            onPress={() => {
-          
-              fetch('https://cargol.outlius.com/noticies/' + route.params.noticia)
-                .then(response => response.json())
-                .then(data => {
-                  //busca el nom de la categoria a partir de data[0].category
-                  let catName = categories.find(category => category.ID == data[0].category)?.nom.toLowerCase();
+ 
+      <Drawer.Navigator
+        initialRouteName='Portada' >
 
-                 // let catName = categories.find(category => category.ID == route.params.noticia)?.nom.toLowerCase();
-                  catName = catName.replace(/ /g, "-");
-                  
-                  let urlShare = "https://elcargol.com/" + catName + "/" + data[0].id + "-" + data[0].alias;
+        <Drawer.Screen name="Portada" component={Main} />
 
-
-                  Share.share({
-                    message: data[0].titol + "\n" + urlShare
-                  });
-                })
-
-            }} >
-
-            <Ionicons name="share-social-outline" size={22} color="black" />
-          </TouchableOpacity>),
-        })}
-
-
-      />
-      </Stack.Navigator>
+      </Drawer.Navigator>
+   
     </NavigationContainer>
   )
 
