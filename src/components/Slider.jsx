@@ -69,8 +69,8 @@ const Slider = ({ handleChange }) => {
     const slides = [
         {
             key: 'slide1',
-            title: 'Informació Legall 2',
-            text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla at volutpat diam ut venenatis. Erat pellentesque adipiscing commodo elit at imperdiet dui accumsan. Neque ornare aenean euismod elementum nisi quis eleifend quam adipiscing. Donec ultrices tincidunt arcu non sodales neque sodales ut etiam',
+            title: 'Informació Legal',
+            text: 'Accedeix a El Cargol Magazine, la revista referència al Penedès a través de la nostra nova aplicació.',
             image: require('../../assets/img/slide1.png'),
         },
 

@@ -17,7 +17,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DetallNoticia from './src/components/DetallNoticia';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'react-native';
+import { Image, SafeAreaView } from 'react-native';
 import { Share } from 'react-native';
 import Notificacions from './src/components/config/Notificacions';
 import Explorar from './src/components/Explorar';
@@ -142,13 +142,11 @@ export default function App() {
             <Image source={require('./assets/img/logo.jpg')} style={{ width: 200, height: 50, resizeMode: 'contain', borderRadius: 10, }} />
           ),
           headerTitleAlign: 'center',
-          headerBackground: () => (
-            <Image
-              style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}
-              //source={require('../../assets/img/REDBG.jpg')}
-              source={{require:'./assets/img/REDBG.jpg'}}
-            />
-          ),
+
+          headerStyle: {
+            backgroundColor: '#f23c38',
+            borderBottomWidth: 0,
+          },
 
         }
 
@@ -227,77 +225,91 @@ export default function App() {
 
 
   return (
-    <NavigationContainer>
+    <>
+      <SafeAreaView style={{ flex: 0, backgroundColor: '#eb4947' }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'gray' }}>
+        {!mantenimiento ? (
+          storage ? (
 
-      <Stack.Navigator
-        initialRouteName="NavegationDrawerApp"
-        screenOptions={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: { fontSize: 18, fontWeight: "bold" },
-          headerStyle: {
-            borderBottomWidth: 1,
-            borderBottomColor: "black",
-          },
-        }}
-      >
-        <Stack.Screen
-          name="-"
-          component={NavegationDrawerApp}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DetallNoticia"
-          component={DetallNoticia}
-          options={({ route }) => ({
-            headerShown: true, title: "", headerStyle: { borderBottomWidth: 0, },
-            headerRight: () => (<TouchableOpacity style={{ marginRight: 20 }}
-              onPress={() => {
+            <NavigationContainer>
 
-                fetch('https://cargol.outlius.com/noticies/' + route.params.noticia)
-                  .then(response => response.json())
-                  .then(data => {
-                    //busca el nom de la categoria a partir de data[0].category
-                    let catName = categories.find(category => category.ID == data[0].category)?.nom.toLowerCase();
+              <Stack.Navigator
+                initialRouteName="NavegationDrawerApp"
+                screenOptions={{
+                  headerShown: true,
+                  headerTitleAlign: "center",
+                  headerTitleStyle: { fontSize: 18, fontWeight: "bold" },
+                  headerStyle: {
+                    borderBottomWidth: 1,
+                    borderBottomColor: "black",
+                  },
+                }}
+              >
+                <Stack.Screen
+                  name="-"
+                  component={NavegationDrawerApp}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="DetallNoticia"
+                  component={DetallNoticia}
+                  options={({ route }) => ({
+                    headerShown: true, title: "", headerStyle: { borderBottomWidth: 0, },
+                    headerRight: () => (<TouchableOpacity style={{ marginRight: 20 }}
+                      onPress={() => {
 
-                    // let catName = categories.find(category => category.ID == route.params.noticia)?.nom.toLowerCase();
-                    catName = catName.replace(/ /g, "-");
+                        fetch('https://cargol.outlius.com/noticies/' + route.params.noticia)
+                          .then(response => response.json())
+                          .then(data => {
+                            //busca el nom de la categoria a partir de data[0].category
+                            let catName = categories.find(category => category.ID == data[0].category)?.nom.toLowerCase();
 
-                    let urlShare = "https://elcargol.com/" + catName + "/" + data[0].id + "-" + data[0].alias;
+                            // let catName = categories.find(category => category.ID == route.params.noticia)?.nom.toLowerCase();
+                            catName = catName.replace(/ /g, "-");
 
-
-                    Share.share({
-                      message: data[0].titol + "\n" + urlShare
-                    });
-                  })
-
-              }} >
-
-              <Ionicons name="share-social-outline" size={22} color="black" />
-            </TouchableOpacity>),
-          })}
+                            let urlShare = "https://elcargol.com/" + catName + "/" + data[0].id + "-" + data[0].alias;
 
 
-        />
-        <Stack.Screen name="Notificacions" component={Notificacions}
-          options={{
-            headerShown: true,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          }}
-        />
-        <Stack.Screen name="Configurar" component={Configurar}
-          options={{
-            headerShown: true,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          }}
-        />
-      </Stack.Navigator>
+                            Share.share({
+                              message: data[0].titol + "\n" + urlShare
+                            });
+                          })
 
-    </NavigationContainer>
+                      }} >
+
+                      <Ionicons name="share-social-outline" size={22} color="black" />
+                    </TouchableOpacity>),
+                  })}
+
+
+                />
+                <Stack.Screen name="Notificacions" component={Notificacions}
+                  options={{
+                    headerShown: true,
+                    headerStyle: {
+                      borderBottomWidth: 0,
+                    },
+                  }}
+                />
+                <Stack.Screen name="Configurar" component={Configurar}
+                  options={{
+                    headerShown: true,
+                    headerStyle: {
+                      borderBottomWidth: 0,
+                    },
+                  }}
+                />
+              </Stack.Navigator>
+
+            </NavigationContainer>
+          ) : (
+            <Slider handleChange={handleChange} />
+          )
+        ) : (
+          <Manteniment />
+        )}
+      </SafeAreaView>
+    </>
   )
 
   /*

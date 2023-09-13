@@ -6,6 +6,8 @@ import categories from "../data/categories";
 const ArticlesList = (props) => {
     const [refreshing, setRefreshing] = useState(false);
     const [noticies, setNoticies] = useState([]);
+    const [publicitats, setPublicitats] = useState(false);
+    const [contador, setContador] = useState(0);
     let categoryId;
     //busca el id de la categoria del listado de categorias a partir del nombre de la categoria qye se pasa por props
     if (props.category !== 0) {
@@ -13,7 +15,24 @@ const ArticlesList = (props) => {
         categoryId = categories.find(category => category.nom === props.category).ID;
     }
 
+    const getPublicitats = async () => {
+        try {
+            fetch('https://cargol.outlius.com/publicitat/getpublicitat')
+                .then(response => response.json())
+                .then(data => setPublicitats(data.message));
+            //  );
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+
     useEffect(() => {
+        getPublicitats();
+    }, []);
+
+    useEffect(() => {
+
         if (props.category === 0) {
             fetch('https://cargol.outlius.com/noticies?limit=' + props.limit + '&start=' + props.start + '')
                 .then(response => response.json())
@@ -23,21 +42,37 @@ const ArticlesList = (props) => {
                 .then(response => response.json())
                 .then(data => setNoticies(data));
         }
+
     }, [props]);
 
     const renderArticleItem = ({ item: article, index }) => (
+
         <>
             <ArticleItem {...article} />
-            {(index + 1) % 3 === 0 && (
-                <View style={{ marginTop: 25, marginBottom: 25 }}>
-                    <TouchableWithoutFeedback onPress={() => Linking.openURL('https://dmsolucionsweb.com')}>
-                        <View>
-                            <Text style={{ fontFamily: 'PoppinsLight', fontSize: 10, position: 'absolute', top: 10, right: 0, paddingHorizontal: 10, zIndex: 1 }}>Publicitat</Text>
-                            <Image source={{ uri: "https://dmsolucionsweb.com/wp-content/uploads/2023/07/dm-solucions-promo-scaled.jpg" }} style={{ width: '100%', height: 120, marginTop: 10 }} />
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-            )}
+            {(index + 1) % 3 === 0 &&
+
+                (
+                    publicitats.length > 0 &&
+                    <View style={{ marginTop: 25, marginBottom: 25 }}>
+
+                        <TouchableWithoutFeedback onPress={() => Linking.openURL(publicitats[Math.floor((index + 1) / 3) -1  ]?.url ||
+                            'https://elcargol.com'
+                        )
+                        }>
+
+                            < View >
+                                <Image
+                                    source={{
+                                        uri:
+                                            'https://cargol.outlius.com/publicitat/' +
+                                            publicitats[Math.floor((index + 1) / 3) -1 ]?.nombre,
+                                    }} style={{ width: '100%', height: 120, marginTop: 10, objectFit: 'contain' }} />
+                            </View>
+                        </TouchableWithoutFeedback>
+
+                    </View >
+                )}
+
         </>
     );
 

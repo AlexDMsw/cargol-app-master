@@ -1,9 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Text, View, ScrollView, FlatList, Image, TouchableWithoutFeedback, Linking, RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
 import ArticlesList from "./ArticlesList.jsx";
 import PortadaItem from "./PortadaItem.jsx";
 import categories from "../data/categories.js";
@@ -13,6 +10,7 @@ const Main = () => {
     const [noticia, setNoticia] = useState(null);
     const [listaDeCategories, setListaDeCategories] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [publicitats, setPublicitats] = useState([]);
 
     useEffect(() => {
         fetch('https://cargol.outlius.com/noticies?limit=1')
@@ -34,8 +32,21 @@ const Main = () => {
             }
         };
         recogerDatos();
+        getPublicitats();
     }, []);
 
+
+    const getPublicitats = async () => {    
+        try {
+            fetch('https://cargol.outlius.com/publicitat/getpublicitat')
+                .then(response => response.json())
+                .then(data => setPublicitats(data.message));
+                  //  setPublicitats(data.message));
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    
 
 
 
@@ -72,10 +83,11 @@ const Main = () => {
 
                         case 'publicitat':
                             return (
+                                publicitats.length > 0 && 
                                 <View style={{ marginTop: 25, marginBottom: 25 }}>
-                                    <TouchableWithoutFeedback onPress={() => Linking.openURL('https://dmsolucionsweb.com')}>
+                                    <TouchableWithoutFeedback onPress={() => Linking.openURL(publicitats[0].url)}>
                                         <View>
-                                            <Image source={{ uri: "https://dmsolucionsweb.com/wp-content/uploads/2023/07/dm-solucions-promo-scaled.jpg" }} style={{ width: '100%', height: 120, marginTop: 10, objectFit: 'contain' }} />
+                                            <Image source={{ uri: "https://cargol.outlius.com/publicitat/"+publicitats[0].nombre }} style={{ width: '100%', height: 120, marginTop: 10, objectFit: 'contain' }} />
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
