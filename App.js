@@ -24,7 +24,7 @@ import Explorar from './src/components/Explorar';
 import categories from './src/data/categories';
 import Configurar from './src/components/Configurar';
 import CustomDrawer from './src/components/CustomDrawer';
-
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -126,6 +126,8 @@ export default function App() {
   function NavegationDrawerApp() {
 
     return (
+
+
       <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}
         initialRouteName="Portada"
         screenOptions={{
@@ -142,7 +144,7 @@ export default function App() {
             <Image source={require('./assets/img/logo.jpg')} style={{ width: 200, height: 50, resizeMode: 'contain', borderRadius: 10, }} />
           ),
           headerTitleAlign: 'center',
-          
+
           headerStyle: {
             backgroundColor: '#f23c38',
             borderBottomWidth: 0,
@@ -220,98 +222,112 @@ export default function App() {
 
 
       </Drawer.Navigator>
+
     );
   }
 
 
   return (
-    <NavigationContainer>
-
-      <Stack.Navigator
-        initialRouteName="NavegationDrawerApp"
-        screenOptions={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: { fontSize: 18, fontWeight: "bold" },
-          headerStyle: {
-            borderBottomWidth: 1,
-            borderBottomColor: "black",
-          },
-        }}
-      >
-        <Stack.Screen
-          name="-"
-          component={NavegationDrawerApp}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="DetallNoticia"
-          component={DetallNoticia}
-          options={({ route }) => ({
-            headerShown: true, title: "", headerStyle: { borderBottomWidth: 0, },
-            headerRight: () => (<TouchableOpacity style={{ marginRight: 20 }}
-              onPress={() => {
-
-                fetch('https://cargol.outlius.com/noticies/' + route.params.noticia)
-                  .then(response => response.json())
-                  .then(data => {
-                    //busca el nom de la categoria a partir de data[0].category
-                    let catName = categories.find(category => category.ID == data[0].category)?.nom.toLowerCase();
-
-                    // let catName = categories.find(category => category.ID == route.params.noticia)?.nom.toLowerCase();
-                    catName = catName.replace(/ /g, "-");
-
-                    let urlShare = "https://elcargol.com/" + catName + "/" + data[0].id + "-" + data[0].alias;
-
-
-                    Share.share({
-                      message: data[0].titol + "\n" + urlShare
-                    });
-                  })
-
-              }} >
-
-              <Ionicons name="share-social-outline" size={22} color="black" />
-            </TouchableOpacity>),
-          })}
-
-
-        />
-        <Stack.Screen name="Notificacions" component={Notificacions}
-          options={{
-            headerShown: true,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          }}
-        />
-        <Stack.Screen name="Configurar" component={Configurar}
-          options={{
-            headerShown: true,
-            headerStyle: {
-              borderBottomWidth: 0,
-            },
-          }}
-        />
-      </Stack.Navigator>
-
-    </NavigationContainer>
-  )
-
-  /*
-  return (
-    <NavigationContainer>
+    <>
       {!mantenimiento ? (
         storage ? (
-         // <NavegationDrawerApp notiTouched={notiTouched} />
-          <NavegationDrawerSuplemente notiTouched={notiTouched} />
+
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="NavegationDrawerApp"
+              screenOptions={{
+                headerShown: true,
+                headerTitleAlign: "center",
+                headerTitleStyle: { fontSize: 18, fontWeight: "bold" },
+                headerStyle: {
+                  borderBottomWidth: 1,
+                  borderBottomColor: "black",
+                },
+              }}
+            >
+              <Stack.Screen
+                name="-"
+                component={NavegationDrawerApp}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="DetallNoticia"
+                component={DetallNoticia}
+                options={({ route }) => ({
+                  headerShown: true, title: "", headerStyle: { borderBottomWidth: 0, },
+                  headerRight: () => (<TouchableOpacity style={{ marginRight: 20 }}
+                    onPress={() => {
+
+                      fetch('https://cargol.outlius.com/noticies/' + route.params.noticia)
+                        .then(response => response.json())
+                        .then(data => {
+                          //busca el nom de la categoria a partir de data[0].category
+                          let catName = categories.find(category => category.ID == data[0].category)?.nom.toLowerCase();
+
+                          // let catName = categories.find(category => category.ID == route.params.noticia)?.nom.toLowerCase();
+                          catName = catName.replace(/ /g, "-");
+
+                          let urlShare = "https://elcargol.com/" + catName + "/" + data[0].id + "-" + data[0].alias;
+
+
+                          Share.share({
+                            message: data[0].titol + "\n" + urlShare
+                          });
+                        })
+
+                    }} >
+
+                    <Ionicons name="share-social-outline" size={22} color="black" />
+                  </TouchableOpacity>),
+                })}
+
+
+              />
+              <Stack.Screen name="Notificacions" component={Notificacions}
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    borderBottomWidth: 0,
+                  },
+                }}
+              />
+              <Stack.Screen name="Configurar" component={Configurar}
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    borderBottomWidth: 0,
+                  },
+                }}
+              />
+            </Stack.Navigator>
+
+          </NavigationContainer>
+
+          
         ) : (
           <Slider handleChange={handleChange} />
         )
       ) : (
         <Manteniment />
       )}
-    </NavigationContainer>
+        <StatusBar style="light" />
+    </>
   )
-*/
+
+  /*
+  return (
+    <NavigationContainer>
+        {!mantenimiento ? (
+          storage ? (
+            // <NavegationDrawerApp notiTouched={notiTouched} />
+            <NavegationDrawerSuplemente notiTouched={notiTouched} />
+          ) : (
+            <Slider handleChange={handleChange} />
+          )
+        ) : (
+          <Manteniment />
+        )}
+      </NavigationContainer>
+      )
+      */
 }
