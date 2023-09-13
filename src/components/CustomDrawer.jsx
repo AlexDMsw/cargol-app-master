@@ -13,9 +13,6 @@ const CustomDrawer = (props) => {
     );
 
 
-        
-
-
 
     return (
         <View style={{ flex: 1 }}>
