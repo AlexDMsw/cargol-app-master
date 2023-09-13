@@ -300,7 +300,7 @@ export default function App() {
                 }}
               />
             </Stack.Navigator>
-
+            <StatusBar style="light" />
           </NavigationContainer>
 
           
@@ -310,7 +310,7 @@ export default function App() {
       ) : (
         <Manteniment />
       )}
-        <StatusBar style="light" />
+   
     </>
   )
 

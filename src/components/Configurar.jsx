@@ -4,6 +4,7 @@ import { Switch } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
 
 const Configurar = () => {
   const navigation = useNavigation();
@@ -54,6 +55,7 @@ const Configurar = () => {
           </View>
       
         </TouchableOpacity>
+        <StatusBar style="dark" />
       </View>
       
       {/*

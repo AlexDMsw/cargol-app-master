@@ -37,6 +37,7 @@ const ArticleItem = (props) => {
             </View>
             </TouchableWithoutFeedback>
         </ScrollView>
+        
     );
 }
 
