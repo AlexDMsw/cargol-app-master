@@ -26,7 +26,7 @@ const DetallNoticia = ({ route }) => {
   return (
     noticiaData && (
       <>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false} >
           <View style={styles.box}>
             <Image source={{ uri: noticiaData.imatge }} style={styles.image} />
             <Text style={styles.cat}>{categories.find(category => category.ID == noticiaData.category)?.nom}</Text>
