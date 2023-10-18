@@ -141,7 +141,7 @@ export default function App() {
           },
 
           headerTitle: () => (
-            <Image source={require('./assets/img/logo.jpg')} style={{ width: 200, height: 50, resizeMode: 'contain', borderRadius: 10, }} />
+            <Image source={require('./assets/img/logo.jpg')} style={{ width: 200, height: 45, resizeMode: 'contain', borderRadius: 10, }} />
           ),
           headerTitleAlign: 'center',
 

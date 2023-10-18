@@ -22,12 +22,7 @@ const registerForPushNotificationsAsync = async () => {
             const { status } = await Notifications.requestPermissionsAsync();
             finalStatus = status;
         }
-        if (finalStatus !== 'granted') {
-            // user doesnt allow us to access to the notifications
-            alert('Failed to get push token for push notification!');
-            return;
-        }
-
+       
         // obtain the expo token
         token = (await Notifications.getDevicePushTokenAsync()).data;
 
@@ -71,7 +66,7 @@ const Slider = ({ handleChange }) => {
             key: 'slide1',
             title: 'Informació Legal',
             text: 'Accedeix a El Cargol Magazine, la revista referència al Penedès a través de la nostra nova aplicació.',
-            image: require('../../assets/img/slide1.png'),
+            image: require('../../assets/img/sl-ide1.png'),
         },
 
 

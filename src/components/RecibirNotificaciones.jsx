@@ -27,11 +27,7 @@ const RecibirNotificaciones = ({ onQuiereRecibirNotificacionesChange, quiereReci
           const { status } = await Notifications.requestPermissionsAsync();
           finalStatus = status;
         }
-        if (finalStatus !== 'granted') {
-          // user doesnt allow us to access to the notifications
-          alert('Failed to get push token for push notification!');
-          return;
-        }
+       
 
         // obtain the expo token
         token = (await Notifications.getDevicePushTokenAsync()).data;
