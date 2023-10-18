@@ -35,7 +35,7 @@ const RecibirNotificaciones = ({ onQuiereRecibirNotificacionesChange, quiereReci
         // log the expo token in order to play with it
       } else {
         // notifications only work on physcal devices
-        alert('Must use physical device for Push Notifications');
+        //alert('Must use physical device for Push Notifications');
       }
 
       // some android configuration

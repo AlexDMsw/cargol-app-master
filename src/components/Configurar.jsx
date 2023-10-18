@@ -58,7 +58,7 @@ const Configurar = () => {
         <StatusBar style="dark" />
       </View>
       
-    
+    {/*
       <View style={styles.contenedorOpcion}>
         <TouchableOpacity
           style={styles.contenedorOpcionIconoTexto}
@@ -72,7 +72,7 @@ const Configurar = () => {
           </View>
         </TouchableOpacity>
       </View>
-    {/*
+    
       <View style={styles.contenedorOpcion}>
         <View style={[styles.contenedorOpcionIconoTexto, { flex: 1 }]}>
           <Ionicons name="moon-outline" size={20} />
