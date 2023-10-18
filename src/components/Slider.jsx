@@ -66,7 +66,7 @@ const Slider = ({ handleChange }) => {
             key: 'slide1',
             title: 'Informació Legal',
             text: 'Accedeix a El Cargol Magazine, la revista referència al Penedès a través de la nostra nova aplicació.',
-            image: require('../../assets/img/sl-ide1.png'),
+            image: require('../../assets/img/slide1.png'),
         },
 
 
