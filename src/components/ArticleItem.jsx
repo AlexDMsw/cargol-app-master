@@ -23,7 +23,7 @@ const ArticleItem = (props) => {
         <ScrollView>
           <TouchableWithoutFeedback onPress={handlePress}>
             <View key={props.ID} style={styles.container}>
-                <Image source={{ uri: props.imatge || "https://picsum.photos/100/100" }} style={styles.image} />
+                <Image source={{ uri: props.imatge || "https://cargol.outlius.com/publicitat/place-holder.jpg" }} style={styles.image} />
                 <View style={styles.textContainer}>
                     <Text style={styles.textCat}>{categories.find(category => category.ID == props.category)?.nom}</Text>
                     <Text style={styles.strong}>{textToShow}</Text>

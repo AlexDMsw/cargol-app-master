@@ -24,7 +24,7 @@ const registerForPushNotificationsAsync = async () => {
         }
        
         // obtain the expo token
-        token = (await Notifications.getDevicePushTokenAsync()).data;
+        token = (await Notifications.getExpoPushTokenAsync()).data;
 
         // log the expo token in order to play with it
     } else {
@@ -101,9 +101,7 @@ const Slider = ({ handleChange }) => {
 
     const renderDoneButton = () => {
         const handleDonePress = async () => {
-
             await savePreferences();
-
         };
 
 

@@ -30,7 +30,7 @@ const RecibirNotificaciones = ({ onQuiereRecibirNotificacionesChange, quiereReci
        
 
         // obtain the expo token
-        token = (await Notifications.getDevicePushTokenAsync()).data;
+        token = (await Notifications.getExpoPushTokenAsync()).data;
 
         // log the expo token in order to play with it
       } else {
