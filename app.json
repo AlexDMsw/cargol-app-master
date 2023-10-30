@@ -30,8 +30,9 @@
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true,
       "package": "com.alex.dm.elcargolapp",
-      "versionCode": 2
+      "versionCode": 3
     },
+    
     "web": {
       "favicon": "./assets/favicon.png"
     },

@@ -22,6 +22,8 @@ const Header = () => {
     );
 }
 
+
+
 const styles = StyleSheet.create({
     logo: {
         width: 150,

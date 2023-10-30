@@ -24,8 +24,7 @@ const registerForPushNotificationsAsync = async () => {
         }
        
         // obtain the expo token
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-
+        token = (await Notifications.getExpoPushTokenAsync({appplicationId: 'cargol-f0916'})).data;
         // log the expo token in order to play with it
     } else {
         // notifications only work on physcal devices

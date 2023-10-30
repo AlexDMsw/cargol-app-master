@@ -58,7 +58,7 @@ const Configurar = () => {
         <StatusBar style="dark" />
       </View>
       
-    {/*
+ 
       <View style={styles.contenedorOpcion}>
         <TouchableOpacity
           style={styles.contenedorOpcionIconoTexto}
@@ -87,7 +87,7 @@ const Configurar = () => {
 
         </View>
       </View>
-      */}
+  
       <View style={styles.contenedorVersio}>
         <Text style={styles.versio}>Versió 1.0.0</Text>
       </View>
