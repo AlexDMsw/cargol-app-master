@@ -8,41 +8,43 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 
-const registerForPushNotificationsAsync = async () => {
+async function registerForPushNotificationsAsync() {
+
     let token;
-
-    if (Constants.isDevice) {
-        // we check if we have access to the notification permission
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-
-
-        if (existingStatus !== 'granted') {
-            // if we dontt have access to it, we ask for it
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-       
-        // obtain the expo token
-        token = (await Notifications.getExpoPushTokenAsync({appplicationId: 'cargol-f0916'})).data;
-        // log the expo token in order to play with it
-    } else {
-        // notifications only work on physcal devices
-       // alert('Must use physical device for Push Notifications');
+  
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+       // alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (
+        await Notifications.getDevicePushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+        })
+        )
+    } 
+    
+    else {
+      alert('Must use physical device for Push Notifications');
     }
-
-    // some android configuration
+  
     if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
         });
-    }
-
+      }
+  
     return token;
-}
+  }
 
 
 const Slider = ({ handleChange }) => {
