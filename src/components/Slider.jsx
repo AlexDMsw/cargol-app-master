@@ -9,7 +9,7 @@ import { Platform } from 'react-native';
 
 
 const registerForPushNotificationsAsync = async () => {
-    let token = "";
+    let token;
 
     if (Constants.isDevice) {
         // we check if we have access to the notification permission
@@ -22,14 +22,14 @@ const registerForPushNotificationsAsync = async () => {
             const { status } = await Notifications.requestPermissionsAsync();
             finalStatus = status;
         }
-
+       
         // obtain the expo token
         token = (await Notifications.getDevicePushTokenAsync()).data;
 
         // log the expo token in order to play with it
     } else {
         // notifications only work on physcal devices
-        // alert('Must use physical device for Push Notifications');
+       // alert('Must use physical device for Push Notifications');
     }
 
     // some android configuration
@@ -136,96 +136,96 @@ const Slider = ({ handleChange }) => {
                             console.error(error);
                         });
 
-                }
+                        }
                 handleChange(true);
-            } catch (error) {
-                console.log('Error saving preferences:', error);
+                    } catch (error) {
+                        console.log('Error saving preferences:', error);
+                    }
+                };
+
+
+
+                return (
+                    <View style={styles.button}>
+                        <TouchableOpacity onPress={handleDonePress}>
+                            <Text style={styles.buttonText}>Finalitzar</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            };
+            const renderNextButton = () => {
+                return (
+                    <TouchableOpacity style={styles.button} onPress={handleNextPress}>
+                        <Text style={styles.buttonText}>Seguent</Text>
+                    </TouchableOpacity>
+                );
             }
+
+            const handleNextPress = () => {
+                sliderRef.current?.goToSlide(slideIndex + 1);
+                setSlideIndex(slideIndex + 1);
+            };
+
+
+            return (
+                <AppIntroSlider
+                    ref={sliderRef}
+                    data={slides}
+                    renderItem={renderItem}
+                    renderDoneButton={renderDoneButton}
+                    renderNextButton={renderNextButton}
+                    onSlideChange={(index) => setSlideIndex(index)} // Actualizamos el estado del índice del slide
+                />
+            );
         };
 
+        const styles = StyleSheet.create({
+            slide: {
+                flex: 1,
+                backgroundColor: '#FFFFFF',
+            },
+            backgroundContainer: {
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+            },
+            backgroundImage: {
+                width: '100%',
+                height: 500,
+                resizeMode: 'cover', // Añade esta línea para ajustar la imagen a todo el espacio disponible
+                //que empieze desde arriba
+
+            },
+            contentContainer: {
+                paddingHorizontal: 32,
+            },
+            title: {
+                fontSize: 22,
+                marginTop: 12,
+                marginHorizontal: 32,
+                color: 'black',
+                fontFamily: 'PoppinsBold',
+                textAlign: 'left', // Añade esta línea para centrar el texto
+            },
+            text: {
+                marginTop: -3,
+                fontSize: 12,
+                marginBottom: 10,
+                marginHorizontal: 32,
+                textAlign: 'left',
+                color: '#4E4B66',
+                fontFamily: 'PoppinsRegular',
+            },
+            button: {
+                backgroundColor: '#eb4947',
+                padding: 16,
+                borderRadius: 8,
+                alignItems: 'center', // Añade esta línea para centrar el botón
+                fontFamily: 'PoppinsRegular',
+            },
+            buttonText: {
+                color: '#FFFFFF',
+            },
+        });
 
 
-        return (
-            <View style={styles.button}>
-                <TouchableOpacity onPress={handleDonePress}>
-                    <Text style={styles.buttonText}>Finalitzar</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    };
-    const renderNextButton = () => {
-        return (
-            <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-                <Text style={styles.buttonText}>Seguent</Text>
-            </TouchableOpacity>
-        );
-    }
-
-    const handleNextPress = () => {
-        sliderRef.current?.goToSlide(slideIndex + 1);
-        setSlideIndex(slideIndex + 1);
-    };
-
-
-    return (
-        <AppIntroSlider
-            ref={sliderRef}
-            data={slides}
-            renderItem={renderItem}
-            renderDoneButton={renderDoneButton}
-            renderNextButton={renderNextButton}
-            onSlideChange={(index) => setSlideIndex(index)} // Actualizamos el estado del índice del slide
-        />
-    );
-};
-
-const styles = StyleSheet.create({
-    slide: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-    },
-    backgroundContainer: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-    },
-    backgroundImage: {
-        width: '100%',
-        height: 500,
-        resizeMode: 'cover', // Añade esta línea para ajustar la imagen a todo el espacio disponible
-        //que empieze desde arriba
-
-    },
-    contentContainer: {
-        paddingHorizontal: 32,
-    },
-    title: {
-        fontSize: 22,
-        marginTop: 12,
-        marginHorizontal: 32,
-        color: 'black',
-        fontFamily: 'PoppinsBold',
-        textAlign: 'left', // Añade esta línea para centrar el texto
-    },
-    text: {
-        marginTop: -3,
-        fontSize: 12,
-        marginBottom: 10,
-        marginHorizontal: 32,
-        textAlign: 'left',
-        color: '#4E4B66',
-        fontFamily: 'PoppinsRegular',
-    },
-    button: {
-        backgroundColor: '#eb4947',
-        padding: 16,
-        borderRadius: 8,
-        alignItems: 'center', // Añade esta línea para centrar el botón
-        fontFamily: 'PoppinsRegular',
-    },
-    buttonText: {
-        color: '#FFFFFF',
-    },
-});
-
-
-export default Slider;
+        export default Slider;
