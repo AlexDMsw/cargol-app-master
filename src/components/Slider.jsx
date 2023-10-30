@@ -8,43 +8,42 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 
-async function registerForPushNotificationsAsync() {
+const registerForPushNotificationsAsync = async () => {
+    let token = "";
 
-    let token;
-  
-    if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-       // alert('Failed to get push token for push notification!');
-        return;
-      }
-      token = (
-        await Notifications.getDevicePushTokenAsync({
-        projectId: Constants.expoConfig.extra.eas.projectId,
-        })
-        )
-    } 
-    
-    else {
-      alert('Must use physical device for Push Notifications');
+    if (Constants.isDevice) {
+        // we check if we have access to the notification permission
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+
+
+        if (existingStatus !== 'granted') {
+            // if we dontt have access to it, we ask for it
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+
+        // obtain the expo token
+        token = (await Notifications.getDevicePushTokenAsync()).data;
+
+        // log the expo token in order to play with it
+    } else {
+        // notifications only work on physcal devices
+        // alert('Must use physical device for Push Notifications');
     }
-  
+
+    // some android configuration
     if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
         });
-      }
-  
+    }
+
     return token;
-  }
+}
 
 
 const Slider = ({ handleChange }) => {
@@ -137,96 +136,96 @@ const Slider = ({ handleChange }) => {
                             console.error(error);
                         });
 
-                        }
+                }
                 handleChange(true);
-                    } catch (error) {
-                        console.log('Error saving preferences:', error);
-                    }
-                };
-
-
-
-                return (
-                    <View style={styles.button}>
-                        <TouchableOpacity onPress={handleDonePress}>
-                            <Text style={styles.buttonText}>Finalitzar</Text>
-                        </TouchableOpacity>
-                    </View>
-                );
-            };
-            const renderNextButton = () => {
-                return (
-                    <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-                        <Text style={styles.buttonText}>Seguent</Text>
-                    </TouchableOpacity>
-                );
+            } catch (error) {
+                console.log('Error saving preferences:', error);
             }
-
-            const handleNextPress = () => {
-                sliderRef.current?.goToSlide(slideIndex + 1);
-                setSlideIndex(slideIndex + 1);
-            };
-
-
-            return (
-                <AppIntroSlider
-                    ref={sliderRef}
-                    data={slides}
-                    renderItem={renderItem}
-                    renderDoneButton={renderDoneButton}
-                    renderNextButton={renderNextButton}
-                    onSlideChange={(index) => setSlideIndex(index)} // Actualizamos el estado del índice del slide
-                />
-            );
         };
 
-        const styles = StyleSheet.create({
-            slide: {
-                flex: 1,
-                backgroundColor: '#FFFFFF',
-            },
-            backgroundContainer: {
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-            },
-            backgroundImage: {
-                width: '100%',
-                height: 500,
-                resizeMode: 'cover', // Añade esta línea para ajustar la imagen a todo el espacio disponible
-                //que empieze desde arriba
-
-            },
-            contentContainer: {
-                paddingHorizontal: 32,
-            },
-            title: {
-                fontSize: 22,
-                marginTop: 12,
-                marginHorizontal: 32,
-                color: 'black',
-                fontFamily: 'PoppinsBold',
-                textAlign: 'left', // Añade esta línea para centrar el texto
-            },
-            text: {
-                marginTop: -3,
-                fontSize: 12,
-                marginBottom: 10,
-                marginHorizontal: 32,
-                textAlign: 'left',
-                color: '#4E4B66',
-                fontFamily: 'PoppinsRegular',
-            },
-            button: {
-                backgroundColor: '#eb4947',
-                padding: 16,
-                borderRadius: 8,
-                alignItems: 'center', // Añade esta línea para centrar el botón
-                fontFamily: 'PoppinsRegular',
-            },
-            buttonText: {
-                color: '#FFFFFF',
-            },
-        });
 
 
-        export default Slider;
+        return (
+            <View style={styles.button}>
+                <TouchableOpacity onPress={handleDonePress}>
+                    <Text style={styles.buttonText}>Finalitzar</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+    const renderNextButton = () => {
+        return (
+            <TouchableOpacity style={styles.button} onPress={handleNextPress}>
+                <Text style={styles.buttonText}>Seguent</Text>
+            </TouchableOpacity>
+        );
+    }
+
+    const handleNextPress = () => {
+        sliderRef.current?.goToSlide(slideIndex + 1);
+        setSlideIndex(slideIndex + 1);
+    };
+
+
+    return (
+        <AppIntroSlider
+            ref={sliderRef}
+            data={slides}
+            renderItem={renderItem}
+            renderDoneButton={renderDoneButton}
+            renderNextButton={renderNextButton}
+            onSlideChange={(index) => setSlideIndex(index)} // Actualizamos el estado del índice del slide
+        />
+    );
+};
+
+const styles = StyleSheet.create({
+    slide: {
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+    },
+    backgroundContainer: {
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+    },
+    backgroundImage: {
+        width: '100%',
+        height: 500,
+        resizeMode: 'cover', // Añade esta línea para ajustar la imagen a todo el espacio disponible
+        //que empieze desde arriba
+
+    },
+    contentContainer: {
+        paddingHorizontal: 32,
+    },
+    title: {
+        fontSize: 22,
+        marginTop: 12,
+        marginHorizontal: 32,
+        color: 'black',
+        fontFamily: 'PoppinsBold',
+        textAlign: 'left', // Añade esta línea para centrar el texto
+    },
+    text: {
+        marginTop: -3,
+        fontSize: 12,
+        marginBottom: 10,
+        marginHorizontal: 32,
+        textAlign: 'left',
+        color: '#4E4B66',
+        fontFamily: 'PoppinsRegular',
+    },
+    button: {
+        backgroundColor: '#eb4947',
+        padding: 16,
+        borderRadius: 8,
+        alignItems: 'center', // Añade esta línea para centrar el botón
+        fontFamily: 'PoppinsRegular',
+    },
+    buttonText: {
+        color: '#FFFFFF',
+    },
+});
+
+
+export default Slider;
